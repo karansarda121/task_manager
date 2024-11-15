@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-function TaskList({ tasks, deleteTask, toggleCompletion }) {
+function TaskList({ tasks, deleteTask, toggleCompletion, addTask }) {
   const [showModal, setShowModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
+  const [showPopup, setShowPopup] = useState(false); // For Popup Visibility
 
   const priorityColors = {
     Low: "bg-green-100 text-green-700",
@@ -24,6 +25,13 @@ function TaskList({ tasks, deleteTask, toggleCompletion }) {
     setShowModal(false);
   };
 
+  // Handle Popup Display
+  const handleAddTask = (title, priority) => {
+    addTask(title, priority);
+    setShowPopup(true); // Show popup when task is added
+    setTimeout(() => setShowPopup(false), 3000); // Hide popup after 3 seconds
+  };
+
   // Scroll effect logic
   const getScrollEffect = (index) => {
     return {
@@ -35,6 +43,18 @@ function TaskList({ tasks, deleteTask, toggleCompletion }) {
 
   return (
     <div>
+      {/* Task Added Popup */}
+      {showPopup && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50"
+        >
+          Task Added!
+        </motion.div>
+      )}
+
       {/* Vertical Scrollable Task List */}
       <motion.div
         initial={{ opacity: 0 }}

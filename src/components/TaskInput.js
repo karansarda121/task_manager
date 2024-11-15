@@ -1,23 +1,54 @@
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify"; // Import toast functions
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
 function TaskInput({ addTask }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Low");
 
   const handleAddTask = () => {
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      // Show warning if title is missing
+      toast.error("Please enter a title for the task!", {
+        position: "top-center",
+        autoClose: 3000, // Toast disappears after 3 seconds
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
+    // Add task when title is provided
     addTask({
       id: Date.now(),
       title,
       completed: false,
       priority,
     });
-    setTitle("");
-    setPriority("Low");
+
+    // Show success toast with task title
+    toast.success(`Task "${title}" Added!`, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+    setTitle(""); // Clear the input field after task is added
+    setPriority("Low"); // Reset priority to "Low"
   };
 
   return (
     <div className="mb-4">
+      {/* Toast Notifications */}
+      <ToastContainer />
+
       <input
         type="text"
         value={title}
